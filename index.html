@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f5ebe0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Engagement Invitation — Alok & Shephali</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Noto+Serif+Devanagari:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="celebration-layer" id="celebration-layer" aria-hidden="true"></div>
+  <div class="petals-layer" id="petals-layer" aria-hidden="true"></div>
+
+  <video id="bg-audio" class="sr-only" loop playsinline preload="auto">
+    <source src="assets/invitation-video.mp4" type="video/mp4" />
+  </video>
+
+  <button class="music-toggle pulse" id="music-toggle" type="button" aria-label="Play music">
+    <span class="music-icon music-icon--play">🔊</span>
+    <span class="music-icon music-icon--pause">🔇</span>
+  </button>
+
+  <!-- SECTION 1: Luxury Envelope -->
+  <section class="scene scene-envelope" id="envelope-scene">
+    <div class="envelope-bg-texture"></div>
+    <div class="lotus lotus-left" aria-hidden="true">🪷</div>
+    <div class="lotus lotus-right" aria-hidden="true">🪷</div>
+
+    <div class="scene-inner">
+      <p class="scroll-hint">Scroll to open the invitation</p>
+
+      <div class="luxury-envelope" id="envelope">
+        <div class="env-body">
+          <div class="env-emboss"></div>
+          <div class="env-floral-top" aria-hidden="true">
+            <span class="rose">🌸</span>
+            <span class="rose main">🌺</span>
+            <span class="rose">🌸</span>
+          </div>
+        </div>
+        <div class="env-flap" id="envelope-flap">
+          <div class="env-flap-inner">
+            <div class="env-emboss"></div>
+            <div class="env-floral-flap" aria-hidden="true">
+              <span>🌸</span><span>🌺</span><span>✿</span><span>🌺</span><span>🌸</span>
+            </div>
+          </div>
+        </div>
+        <div class="env-seal" id="envelope-seal">
+          <span class="seal-names">Alok &<br />Shephali</span>
+        </div>
+        <div class="env-open-text" id="envelope-letter">
+          <p class="invited-text">You're Invited</p>
+          <p class="invited-sub">Engagement Ceremony</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: Golden Arch + Couple -->
+  <section class="scene scene-couple" id="couple-scene">
+    <div class="golden-arch" aria-hidden="true">
+      <div class="arch-top"></div>
+      <div class="arch-garland"></div>
+      <div class="arch-pillar left"></div>
+      <div class="arch-pillar right"></div>
+    </div>
+    <div class="lotus-side left" aria-hidden="true">🪷</div>
+    <div class="lotus-side right" aria-hidden="true">🪷</div>
+
+    <div class="couple-content">
+      <div class="ganesha-block reveal-item">
+        <span class="ganesha">🙏</span>
+        <p class="shloka">॥ Shree Ganeshaya Namah ॥</p>
+      </div>
+
+      <p class="invite-line reveal-item">
+        We cordially invite you to witness and bless the engagement ceremony of
+      </p>
+
+      <div class="names-display reveal-item">
+        <h2 class="name-script" id="groom-name">Alok</h2>
+        <p class="with-text">with</p>
+        <h2 class="name-script" id="bride-name">Shephali</h2>
+      </div>
+
+      <div class="parents-display reveal-item">
+        <p id="groom-parents">S/o Mr. Brijesh Singh & Mrs. Kiran Singh</p>
+        <p id="bride-parents">D/o Mr. Bhupendra Singh & Mrs. Manju Singh</p>
+      </div>
+
+      <div class="jali-rail reveal-item" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: Scratch to Reveal Date & Time -->
+  <section class="scene scene-scratch" id="scratch-scene">
+    <div class="floral-top-band reveal-item" aria-hidden="true"></div>
+
+    <div class="scratch-section reveal-item">
+      <p class="save-label">Save the Date</p>
+
+      <div class="scratch-card" id="scratch-card">
+        <div class="scratch-reveal" id="scratch-reveal">
+          <p class="revealed-date" id="revealed-date">Saturday, 11th July 2026</p>
+          <p class="revealed-time" id="revealed-time">6:00 PM to 11:00 PM</p>
+          <p class="revealed-event">Engagement Ceremony</p>
+        </div>
+        <canvas class="scratch-canvas" id="scratch-canvas" aria-label="Scratch to reveal date and time"></canvas>
+        <p class="scratch-hint" id="scratch-hint">✨ Scratch to Reveal ✨</p>
+      </div>
+
+      <div class="countdown hidden-until-scratch" id="countdown-block">
+        <div class="count-unit"><span id="cd-days">00</span><small>Days</small></div>
+        <div class="count-unit"><span id="cd-hours">00</span><small>Hours</small></div>
+        <div class="count-unit"><span id="cd-mins">00</span><small>Minutes</small></div>
+        <div class="count-unit"><span id="cd-secs">00</span><small>Seconds</small></div>
+      </div>
+
+      <p class="meet-couple reveal-item">Meet the Couple</p>
+    </div>
+  </section>
+
+  <!-- SECTION 4: Welcome -->
+  <section class="scene scene-welcome" id="welcome-scene">
+    <div class="welcome-split">
+      <div class="welcome-top reveal-item">
+        <p class="welcome-script">Awaiting Your Noble Presence</p>
+        <blockquote>
+          Join us as we celebrate love, laughter, and the beginning of a beautiful journey together.
+        </blockquote>
+        <p class="hindi-blessing">॥ शुभ सगाई संस्कार ॥</p>
+      </div>
+      <div class="welcome-bottom reveal-item">
+        <p class="with-love">WITH LOVE</p>
+        <p class="family-script">Singh Family</p>
+        <p class="hashtag">#AlokEngagesShephali</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: Venue -->
+  <section class="scene scene-venue" id="venue-scene">
+    <div class="venue-top reveal-item">
+      <p class="venue-label">Where We Celebrate</p>
+      <h2 class="venue-name" id="venue-name">De Grandeur Hotel And Banquets</h2>
+      <p class="venue-address" id="event-venue">
+        Royal Plaza Anand Nagar, Near Bhakti Park Ghodbunder Road, Thane West, Thane, Mumbai
+      </p>
+      <a class="map-btn" id="event-map" href="https://maps.app.goo.gl/orNarWzCHPnuG1hs6" target="_blank" rel="noopener noreferrer">
+        ✈ Get Directions
+      </a>
+    </div>
+    <div class="venue-bottom reveal-item">
+      <p class="with-love">WITH LOVE</p>
+      <p class="couple-script">Alok & Shephali</p>
+      <p class="venue-date-hidden" id="venue-date-note">Scratch above to reveal the date ✨</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>With love & blessings · ॐ</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
