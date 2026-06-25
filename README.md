@@ -15,7 +15,7 @@ Open `index.html` in any modern browser.
 5. **Welcome card** with glassmorphism style
 6. **Venue details** with Google Maps directions button
 7. **Falling rose petals** animation
-8. **Background music** — audio from `assets/invitation-video.mp4` (video not shown)
+8. **Background music** 
 
 ## Venue
 
