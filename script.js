@@ -12,13 +12,56 @@ const INVITATION = {
   venueName: 'De Grandeur Hotel And Banquets',
   venue: 'Royal Plaza Anand Nagar, Near Bhakti Park Ghodbunder Road, Thane West, Thane, Mumbai',
   mapUrl: 'https://maps.app.goo.gl/orNarWzCHPnuG1hs6',
-  audioSrc: 'assets/invitation-video.mp4',
+  // Kithe Reh Gaya - Neeti Mohan
+  audioSrc: 'assets/background-music.mp3',
+  musicTitle: 'Kithe Reh Gaya - Neeti Mohan',
+  musicStart: 0.12, // 0.12 seconds
+  musicEnd: 76, // 1 minute 16 seconds
   musicVolume: 0.85,
 };
 
+function formatCoupleName(name) {
+  if (!name) return '';
+  return `<span class="name-flow">${name}</span>`;
+}
+
+function fitStageArchContent() {
+  const frame = document.querySelector('.stage-frame');
+  const arch = document.querySelector('.arch-content');
+  const inner = document.getElementById('arch-content-inner');
+  if (!frame || !arch || !inner) return;
+
+  inner.style.setProperty('--arch-fit', '1');
+
+  const frameH = frame.clientHeight;
+  if (frameH < 80) return;
+
+  const archStyle = getComputedStyle(arch);
+  const topPx = parseFloat(archStyle.top) || 0;
+  const bottomPx = parseFloat(archStyle.bottom) || 0;
+  const availH = frameH - topPx - bottomPx;
+  const availW = arch.clientWidth;
+
+  if (availH <= 0 || availW <= 0) return;
+
+  const naturalH = inner.scrollHeight;
+  const naturalW = inner.scrollWidth;
+  if (naturalH <= 0 || naturalW <= 0) return;
+
+  const scale = Math.min(1, availH / naturalH, availW / naturalW);
+  if (scale < 1) {
+    inner.style.setProperty('--arch-fit', Math.max(0.72, scale).toFixed(4));
+  }
+}
+
 // Content
-document.getElementById('groom-name').textContent = INVITATION.groomName;
-document.getElementById('bride-name').textContent = INVITATION.brideName;
+document.getElementById('groom-name').innerHTML = formatCoupleName(INVITATION.groomName);
+document.getElementById('bride-name').innerHTML = formatCoupleName(INVITATION.brideName);
+const venueCoupleNames = document.getElementById('venue-couple-names');
+if (venueCoupleNames) {
+  venueCoupleNames.innerHTML =
+    `${formatCoupleName(INVITATION.groomName)}<span class="name-join">&</span>${formatCoupleName(INVITATION.brideName)}`;
+}
 document.getElementById('groom-parents').textContent = INVITATION.groomParents;
 document.getElementById('bride-parents').textContent = INVITATION.brideParents;
 document.getElementById('revealed-date').textContent = INVITATION.date;
@@ -29,6 +72,7 @@ document.getElementById('event-map').href = INVITATION.mapUrl;
 
 const progressBar = document.querySelector('.scroll-progress');
 const envelopeScene = document.getElementById('envelope-scene');
+const envelopeEl = document.getElementById('envelope');
 const envelopeFlap = document.getElementById('envelope-flap');
 const envelopeSeal = document.getElementById('envelope-seal');
 const envelopeLetter = document.getElementById('envelope-letter');
@@ -40,7 +84,19 @@ const celebrationLayer = document.getElementById('celebration-layer');
 const petalsLayer = document.getElementById('petals-layer');
 
 bgAudio.volume = INVITATION.musicVolume;
-bgAudio.src = INVITATION.audioSrc;
+bgAudio.loop = false;
+bgAudio.preload = 'auto';
+
+const musicSources = [INVITATION.audioSrc];
+let musicSourceIndex = 0;
+
+function loadMusicSource(index = 0) {
+  musicSourceIndex = index;
+  bgAudio.src = musicSources[index];
+  bgAudio.load();
+}
+
+loadMusicSource(0);
 
 let envelopeCelebrationFired = false;
 let dateRevealed = false;
@@ -100,19 +156,19 @@ function spawnParticle(layer, opts) {
 }
 
 function petalShower(intensity = 'normal') {
-  const count = intensity === 'burst' ? 80 : 35;
+  const count = intensity === 'burst' ? 100 : 50;
   for (let i = 0; i < count; i++) {
     setTimeout(() => {
       spawnParticle(petalsLayer, {
         x: Math.random() * 100,
         y: -5,
         color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
-        size: 6 + Math.random() * 10,
-        velocity: 2 + Math.random() * 5,
-        angle: Math.PI / 2 + (Math.random() - 0.5) * 0.8,
-        duration: 100 + Math.random() * 60,
+        size: 7 + Math.random() * 11,
+        velocity: 2 + Math.random() * 5.5,
+        angle: Math.PI / 2 + (Math.random() - 0.5) * 0.9,
+        duration: 100 + Math.random() * 70,
       });
-    }, i * (intensity === 'burst' ? 15 : 40));
+    }, i * (intensity === 'burst' ? 12 : 32));
   }
 }
 
@@ -131,13 +187,13 @@ function crackerBurst() {
       });
     }, i * 20);
   }
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 62; i++) {
     setTimeout(() => {
       spawnParticle(celebrationLayer, {
         x: 30 + Math.random() * 40,
         y: 30 + Math.random() * 30,
         color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
-        size: 8 + Math.random() * 12,
+        size: 8 + Math.random() * 13,
         velocity: 5 + Math.random() * 12,
         angle: Math.random() * Math.PI * 2,
         duration: 90 + Math.random() * 40,
@@ -161,12 +217,12 @@ function startAmbientPetals() {
       x: Math.random() * 100,
       y: -3,
       color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
-      size: 5 + Math.random() * 6,
-      velocity: 1.5 + Math.random() * 2,
-      angle: Math.PI / 2 + (Math.random() - 0.5) * 0.4,
+      size: 5 + Math.random() * 7,
+      velocity: 1.5 + Math.random() * 2.5,
+      angle: Math.PI / 2 + (Math.random() - 0.5) * 0.45,
       duration: 120,
     });
-  }, 900);
+  }, 720);
 }
 
 // ===== Envelope scroll =====
@@ -181,20 +237,31 @@ function handleScroll() {
 
   envelopeFlap.style.transform = `rotateX(${lerp(0, 165, progress)}deg)`;
 
+  if (envelopeEl) {
+    envelopeEl.style.transform = `translateY(${lerp(0, -10, progress)}px) scale(${lerp(1, 1.018, progress)})`;
+  }
+  envelopeScene.classList.toggle('is-opening', progress > 0.06);
+
   const sealFade = clamp(1 - progress * 2.5, 0, 1);
   envelopeSeal.style.opacity = sealFade;
   envelopeSeal.style.transform = `translate(-50%, -50%) scale(${lerp(1, 0.3, progress)})`;
 
-  envelopeLetter.style.opacity = clamp((progress - 0.35) * 2.5, 0, 1);
-  envelopeLetter.style.transform = `translateY(${lerp(16, 0, clamp((progress - 0.35) * 2.5, 0, 1))}px)`;
+  const letterT = clamp((progress - 0.22) * 2.4, 0, 1);
+  envelopeLetter.style.opacity = letterT;
+  envelopeLetter.style.setProperty('--invite-open', letterT.toFixed(3));
+  const letterY = lerp(-18, -42, letterT);
+  envelopeLetter.style.transform = `translate(-50%, ${letterY}%)`;
 
   if (scrollHint) scrollHint.style.opacity = clamp(1 - progress * 3, 0, 1);
   envelopeScene.style.opacity = clamp(1 - progress * 0.45, 0.55, 1);
 
+  if (progress > 0.01) tryStartMusicOnScroll(progress);
+
   if (progress > 0.55 && !envelopeCelebrationFired) {
     envelopeCelebrationFired = true;
     petalShower('normal');
-    setTimeout(() => petalShower('normal'), 300);
+    setTimeout(() => petalShower('normal'), 280);
+    setTimeout(() => petalShower('normal'), 560);
   }
 }
 
@@ -203,12 +270,87 @@ const scratchCard = document.getElementById('scratch-card');
 const scratchCanvas = document.getElementById('scratch-canvas');
 const scratchHint = document.getElementById('scratch-hint');
 const countdownBlock = document.getElementById('countdown-block');
-const venueBottom = document.querySelector('.venue-bottom');
-const venueDateNote = document.getElementById('venue-date-note');
 const ctx = scratchCanvas.getContext('2d');
 let isScratching = false;
 let scratchedPixels = 0;
 let totalPixels = 0;
+let scratchDodgeCount = 0;
+let scratchUnlocked = false;
+let isScratchDodging = false;
+
+const SCRATCH_DODGE_HINTS = [
+  '✨ Try again… ✨',
+  '😄 Catch me if you can!',
+  '🙈 One more try…',
+  '✨ Scratch to Reveal ✨',
+];
+
+function updateScratchHint() {
+  if (!scratchHint) return;
+  if (scratchUnlocked) {
+    scratchHint.textContent = SCRATCH_DODGE_HINTS[3];
+    return;
+  }
+  if (scratchDodgeCount === 0) {
+    scratchHint.textContent = '✨ Scratch to Reveal ✨';
+    return;
+  }
+  const dodgeLabels = ['← Nice try!', '→ Almost…', '↑ One more!'];
+  scratchHint.textContent = dodgeLabels[Math.min(scratchDodgeCount - 1, 2)] || SCRATCH_DODGE_HINTS[Math.min(scratchDodgeCount - 1, 2)];
+}
+
+const SCRATCH_DODGE_DIRECTIONS = [
+  { x: -1, y: 0, label: 'left' },
+  { x: 1, y: 0, label: 'right' },
+  { x: 0, y: -1, label: 'up' },
+];
+
+function dodgeScratchCard(dodgeIndex) {
+  if (isScratchDodging || !scratchCard) return;
+
+  const dir = SCRATCH_DODGE_DIRECTIONS[dodgeIndex] || { x: 0, y: 1 };
+  const moveX = Math.min(140, window.innerWidth * 0.36);
+  const moveY = 62;
+  const dx = dir.x * moveX;
+  const dy = dir.y * moveY;
+
+  isScratchDodging = true;
+  scratchCanvas.style.pointerEvents = 'none';
+
+  scratchCard.classList.remove('scratch-return');
+  scratchCard.classList.add('scratch-dodge');
+  scratchCard.style.transform = `translate(${dx}px, ${dy}px)`;
+
+  window.setTimeout(() => {
+    scratchCard.classList.remove('scratch-dodge');
+    scratchCard.classList.add('scratch-return');
+    scratchCard.style.transform = 'translate(0, 0)';
+
+    window.setTimeout(() => {
+      scratchCard.classList.remove('scratch-return');
+      scratchCanvas.style.pointerEvents = '';
+      isScratchDodging = false;
+    }, 440);
+  }, 550);
+}
+
+function beginScratchSession(clientX, clientY) {
+  if (dateRevealed || isScratchDodging) return false;
+  if (scratchUnlocked) return true;
+
+  if (scratchDodgeCount < 3) {
+    const dodgeIndex = scratchDodgeCount;
+    scratchDodgeCount += 1;
+    updateScratchHint();
+    dodgeScratchCard(dodgeIndex);
+    return false;
+  }
+
+  scratchUnlocked = true;
+  scratchCard.style.transform = 'translate(0, 0)';
+  updateScratchHint();
+  return true;
+}
 
 function initScratchCanvas() {
   const rect = scratchCard.getBoundingClientRect();
@@ -238,17 +380,13 @@ function initScratchCanvas() {
     ctx.fill();
   }
 
-  ctx.font = '600 14px Playfair Display, serif';
-  ctx.fillStyle = 'rgba(122,45,58,0.5)';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('Scratch Here', w / 2, h / 2);
-
   totalPixels = w * h;
   scratchedPixels = 0;
 }
 
 function scratchAt(clientX, clientY) {
+  if (!scratchUnlocked || dateRevealed) return;
+
   const rect = scratchCanvas.getBoundingClientRect();
   const x = clientX - rect.left;
   const y = clientY - rect.top;
@@ -291,8 +429,6 @@ function revealDate() {
   dateRevealed = true;
   scratchCard.classList.add('revealed');
   countdownBlock.classList.add('visible');
-  venueBottom.classList.add('revealed');
-  venueDateNote.textContent = `${INVITATION.date} · ${INVITATION.time}`;
   megaCelebration();
 }
 
@@ -302,26 +438,29 @@ function getTouchPos(e) {
 }
 
 scratchCanvas.addEventListener('mousedown', (e) => {
+  if (!beginScratchSession(e.clientX, e.clientY)) return;
   isScratching = true;
   scratchAt(e.clientX, e.clientY);
 });
 
 scratchCanvas.addEventListener('mousemove', (e) => {
-  if (isScratching) scratchAt(e.clientX, e.clientY);
+  if (!isScratching || !scratchUnlocked) return;
+  scratchAt(e.clientX, e.clientY);
 });
 
 window.addEventListener('mouseup', () => { isScratching = false; });
 
 scratchCanvas.addEventListener('touchstart', (e) => {
   e.preventDefault();
-  isScratching = true;
   const p = getTouchPos(e);
+  if (!beginScratchSession(p.x, p.y)) return;
+  isScratching = true;
   scratchAt(p.x, p.y);
 }, { passive: false });
 
 scratchCanvas.addEventListener('touchmove', (e) => {
   e.preventDefault();
-  if (!isScratching) return;
+  if (!isScratching || !scratchUnlocked) return;
   const p = getTouchPos(e);
   scratchAt(p.x, p.y);
 }, { passive: false });
@@ -353,9 +492,27 @@ revealItems.forEach((el) => revealObserver.observe(el));
 window.addEventListener('scroll', handleScroll, { passive: true });
 window.addEventListener('resize', () => {
   handleScroll();
+  fitStageArchContent();
+  if (scratchCard) {
+    scratchCard.style.transform = '';
+    scratchCard.classList.remove('scratch-dodge');
+  }
   if (!dateRevealed) initScratchCanvas();
 });
 handleScroll();
+
+const stageBgImg = document.querySelector('.stage-bg-img');
+if (stageBgImg) {
+  const runFit = () => requestAnimationFrame(fitStageArchContent);
+  if (stageBgImg.complete) runFit();
+  else stageBgImg.addEventListener('load', runFit, { once: true });
+}
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => requestAnimationFrame(fitStageArchContent));
+} else {
+  requestAnimationFrame(fitStageArchContent);
+}
 
 // Init scratch after layout
 requestAnimationFrame(() => {
@@ -364,33 +521,96 @@ requestAnimationFrame(() => {
 
 startAmbientPetals();
 
-// ===== Audio =====
-let musicStarted = false;
+// ===== Audio: Kithe Reh Gaya — clip 0.12s → 1:16 (76s) =====
+let musicLoading = false;
+let musicHasStarted = false;
+let userPausedMusic = false;
+
+function seekToMusicStart() {
+  if (!Number.isFinite(INVITATION.musicStart) || bgAudio.readyState < 1) return;
+  if (bgAudio.currentTime < INVITATION.musicStart || bgAudio.currentTime >= INVITATION.musicEnd) {
+    bgAudio.currentTime = INVITATION.musicStart;
+  }
+}
+
+function loopMusicClip() {
+  if (bgAudio.paused) return;
+  if (bgAudio.currentTime >= INVITATION.musicEnd - 0.05) {
+    seekToMusicStart();
+  }
+}
+
+function syncMusicToggle() {
+  musicToggle.classList.toggle('playing', !bgAudio.paused && musicHasStarted);
+}
+
+bgAudio.addEventListener('loadedmetadata', seekToMusicStart);
+bgAudio.addEventListener('timeupdate', loopMusicClip);
+bgAudio.addEventListener('play', syncMusicToggle);
+bgAudio.addEventListener('pause', syncMusicToggle);
+bgAudio.addEventListener('ended', () => {
+  seekToMusicStart();
+  if (musicHasStarted && !userPausedMusic) {
+    bgAudio.play().catch(() => {});
+  }
+});
+bgAudio.addEventListener('error', () => {
+  if (musicSourceIndex < musicSources.length - 1) {
+    loadMusicSource(musicSourceIndex + 1);
+    return;
+  }
+  console.warn(
+    `Could not load "${INVITATION.musicTitle}". Add the file as assets/background-music.mp3`
+  );
+});
+
+async function ensureAudioReady() {
+  if (bgAudio.readyState >= 2) return;
+  await new Promise((resolve) => {
+    const done = () => resolve();
+    bgAudio.addEventListener('canplay', done, { once: true });
+    bgAudio.addEventListener('error', done, { once: true });
+    bgAudio.load();
+    setTimeout(done, 2500);
+  });
+}
+
+async function playMusic() {
+  if (musicLoading) return;
+  musicLoading = true;
+  try {
+    await ensureAudioReady();
+    if (bgAudio.error) return;
+    seekToMusicStart();
+    bgAudio.muted = false;
+    bgAudio.volume = INVITATION.musicVolume;
+    await bgAudio.play();
+    musicHasStarted = true;
+    userPausedMusic = false;
+    musicToggle.classList.add('playing');
+    musicToggle.classList.remove('pulse');
+  } catch {
+    /* browser blocked — user can tap music button */
+  } finally {
+    musicLoading = false;
+  }
+}
+
+function pauseMusic() {
+  userPausedMusic = true;
+  bgAudio.pause();
+  musicToggle.classList.remove('playing');
+}
+
+function tryStartMusicOnScroll(progress = 0) {
+  if (musicHasStarted || userPausedMusic || musicLoading) return;
+  if (window.scrollY >= 1 || progress > 0.01) playMusic();
+}
 
 musicToggle.addEventListener('click', async () => {
   if (bgAudio.paused) {
-    try {
-      bgAudio.muted = false;
-      await bgAudio.play();
-      musicToggle.classList.add('playing');
-      musicToggle.classList.remove('pulse');
-      musicStarted = true;
-    } catch { /* ignore */ }
+    await playMusic();
   } else {
-    bgAudio.pause();
-    musicToggle.classList.remove('playing');
+    pauseMusic();
   }
 });
-
-function tryAutoPlay() {
-  if (musicStarted) return;
-  bgAudio.muted = false;
-  bgAudio.play().then(() => {
-    musicToggle.classList.add('playing');
-    musicToggle.classList.remove('pulse');
-    musicStarted = true;
-  }).catch(() => {});
-}
-
-window.addEventListener('scroll', tryAutoPlay, { once: true, passive: true });
-document.addEventListener('touchstart', tryAutoPlay, { once: true, passive: true });

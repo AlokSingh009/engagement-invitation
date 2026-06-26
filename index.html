@@ -8,7 +8,7 @@
   <title>Engagement Invitation — Alok & Shephali</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Noto+Serif+Devanagari:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Noto+Serif+Devanagari:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -16,67 +16,96 @@
   <div class="celebration-layer" id="celebration-layer" aria-hidden="true"></div>
   <div class="petals-layer" id="petals-layer" aria-hidden="true"></div>
 
-  <video id="bg-audio" class="sr-only" loop playsinline preload="auto">
-    <source src="assets/invitation-video.mp4" type="video/mp4" />
-  </video>
+  <audio id="bg-audio" class="sr-only" preload="auto"></audio>
 
   <button class="music-toggle pulse" id="music-toggle" type="button" aria-label="Play music">
     <span class="music-icon music-icon--play">🔊</span>
     <span class="music-icon music-icon--pause">🔇</span>
   </button>
 
-  <!-- SECTION 1: Luxury Envelope -->
+  <!-- SECTION 1: Luxury Envelope (reference style) -->
   <section class="scene scene-envelope" id="envelope-scene">
     <div class="envelope-bg-texture"></div>
-    <div class="lotus lotus-left" aria-hidden="true">🪷</div>
-    <div class="lotus lotus-right" aria-hidden="true">🪷</div>
+    <div class="envelope-aura" aria-hidden="true">
+      <span class="aura-orb aura-orb--1"></span>
+      <span class="aura-orb aura-orb--2"></span>
+      <span class="aura-orb aura-orb--3"></span>
+    </div>
 
     <div class="scene-inner">
-      <p class="scroll-hint">Scroll to open the invitation</p>
+      <p class="scroll-hint"><span class="scroll-hint-line"></span>Scroll to open the invitation<span class="scroll-hint-line"></span></p>
 
       <div class="luxury-envelope" id="envelope">
         <div class="env-body">
-          <div class="env-emboss"></div>
-          <div class="env-floral-top" aria-hidden="true">
-            <span class="rose">🌸</span>
-            <span class="rose main">🌺</span>
-            <span class="rose">🌸</span>
-          </div>
-        </div>
-        <div class="env-flap" id="envelope-flap">
-          <div class="env-flap-inner">
-            <div class="env-emboss"></div>
-            <div class="env-floral-flap" aria-hidden="true">
-              <span>🌸</span><span>🌺</span><span>✿</span><span>🌺</span><span>🌸</span>
+          <div class="env-liner" aria-hidden="true"></div>
+          <div class="env-paper-texture env-paper-texture--body" aria-hidden="true"></div>
+          <div class="env-print env-print--body" aria-hidden="true"></div>
+          <div class="env-emboss-leaves"></div>
+          <div class="env-body-shine"></div>
+          <div class="env-gold-frame" aria-hidden="true"></div>
+          <div class="env-inner-plain" aria-hidden="true"></div>
+          <div class="env-letter" id="envelope-letter">
+            <div class="env-letter-paper">
+              <div class="letter-paper-texture" aria-hidden="true"></div>
+              <div class="letter-paper-shine" aria-hidden="true"></div>
+              <div class="letter-corner letter-corner--tl" aria-hidden="true"></div>
+              <div class="letter-corner letter-corner--tr" aria-hidden="true"></div>
+              <div class="letter-corner letter-corner--bl" aria-hidden="true"></div>
+              <div class="letter-corner letter-corner--br" aria-hidden="true"></div>
+              <p class="invited-text">You're Invited</p>
+              <p class="invited-sub">Engagement Ceremony</p>
             </div>
           </div>
         </div>
-        <div class="env-seal" id="envelope-seal">
-          <span class="seal-names">Alok &<br />Shephali</span>
+
+        <div class="env-flap" id="envelope-flap">
+          <div class="env-flap-inner">
+            <div class="env-paper-texture env-paper-texture--flap" aria-hidden="true"></div>
+            <div class="env-print env-print--flap" aria-hidden="true"></div>
+            <div class="env-emboss-leaves"></div>
+            <div class="flap-shine" aria-hidden="true"></div>
+            <div class="flap-monogram" aria-label="Shephali and Alok">
+              <span class="flap-cursive flap-cursive--s">S</span>
+              <span class="flap-cursive flap-cursive--a">A</span>
+            </div>
+          </div>
         </div>
-        <div class="env-open-text" id="envelope-letter">
-          <p class="invited-text">You're Invited</p>
-          <p class="invited-sub">Engagement Ceremony</p>
+
+        <div class="env-seal" id="envelope-seal">
+          <div class="seal-wax-ring" aria-hidden="true"></div>
+          <div class="seal-om" aria-label="Om"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 2: Golden Arch + Couple -->
+  <!-- SECTION 2: Stage background + arch content -->
   <section class="scene scene-couple" id="couple-scene">
-    <div class="golden-arch" aria-hidden="true">
-      <div class="arch-top"></div>
-      <div class="arch-garland"></div>
-      <div class="arch-pillar left"></div>
-      <div class="arch-pillar right"></div>
-    </div>
-    <div class="lotus-side left" aria-hidden="true">🪷</div>
-    <div class="lotus-side right" aria-hidden="true">🪷</div>
+    <div class="stage-frame">
+      <div class="stage-bg" aria-hidden="true">
+        <img
+          class="stage-bg-img"
+          src="assets/couple-stage-bg.jpg"
+          alt=""
+          onerror="this.onerror=null;this.src='assets/couple-stage-bg.png';"
+        />
+      </div>
 
-    <div class="couple-content">
+      <div class="arch-content">
+      <div class="arch-content-inner" id="arch-content-inner">
       <div class="ganesha-block reveal-item">
-        <span class="ganesha">🙏</span>
-        <p class="shloka">॥ Shree Ganeshaya Namah ॥</p>
+        <img
+          class="ganesha-logo"
+          src="assets/ganesha-logo.svg"
+          alt="Lord Ganesha"
+        />
+      </div>
+
+      <p class="shloka reveal-item">॥ श्री गणेशाय नमः ॥</p>
+
+      <div class="arch-invited reveal-item">
+        <p class="arch-invited-title">You're Invited</p>
+        <p class="arch-invited-sub">Engagement Ceremony</p>
       </div>
 
       <p class="invite-line reveal-item">
@@ -84,17 +113,19 @@
       </p>
 
       <div class="names-display reveal-item">
-        <h2 class="name-script" id="groom-name">Alok</h2>
-        <p class="with-text">with</p>
-        <h2 class="name-script" id="bride-name">Shephali</h2>
+        <div class="names-monogram names-monogram--stacked" aria-label="Alok and Shephali">
+          <h2 class="name-script" id="groom-name">Alok</h2>
+          <span class="name-join" aria-hidden="true">And</span>
+          <h2 class="name-script" id="bride-name">Shephali</h2>
+        </div>
       </div>
 
       <div class="parents-display reveal-item">
         <p id="groom-parents">S/o Mr. Brijesh Singh & Mrs. Kiran Singh</p>
         <p id="bride-parents">D/o Mr. Bhupendra Singh & Mrs. Manju Singh</p>
       </div>
-
-      <div class="jali-rail reveal-item" aria-hidden="true"></div>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -123,24 +154,45 @@
       </div>
 
       <p class="meet-couple reveal-item">Meet the Couple</p>
+
+      <div class="couple-cutout reveal-item">
+        <img
+          class="couple-cutout-img"
+          src="assets/couple-cutout.png"
+          alt="Alok and Shephali"
+          onerror="this.onerror=null;this.src='assets/couple-cutout.jpg';"
+        />
+      </div>
+
+      <div class="couple-row reveal-item">
+        <div class="couple-temple">
+          <img
+            class="couple-temple-img"
+            src="assets/couple-temple.png"
+            alt="Alok and Shephali at the temple"
+            onerror="this.onerror=null;this.src='assets/couple-temple.jpg';"
+          />
+        </div>
+        <div class="couple-popart">
+          <img
+            class="couple-popart-img"
+            src="assets/couple-popart.png"
+            alt="Alok and Shephali illustration"
+            onerror="this.onerror=null;this.src='assets/couple-popart.jpg';"
+          />
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- SECTION 4: Welcome -->
   <section class="scene scene-welcome" id="welcome-scene">
-    <div class="welcome-split">
-      <div class="welcome-top reveal-item">
-        <p class="welcome-script">Awaiting Your Noble Presence</p>
-        <blockquote>
-          Join us as we celebrate love, laughter, and the beginning of a beautiful journey together.
-        </blockquote>
-        <p class="hindi-blessing">॥ शुभ सगाई संस्कार ॥</p>
-      </div>
-      <div class="welcome-bottom reveal-item">
-        <p class="with-love">WITH LOVE</p>
-        <p class="family-script">Singh Family</p>
-        <p class="hashtag">#AlokEngagesShephali</p>
-      </div>
+    <div class="welcome-card reveal-item">
+      <p class="welcome-script">Awaiting Your Noble Presence</p>
+      <blockquote>
+        Join us as we celebrate love, laughter, and the beginning of a beautiful journey together.
+      </blockquote>
+      <p class="hindi-blessing">॥ शुभ सगाई संस्कार ॥</p>
     </div>
   </section>
 
@@ -155,11 +207,12 @@
       <a class="map-btn" id="event-map" href="https://maps.app.goo.gl/orNarWzCHPnuG1hs6" target="_blank" rel="noopener noreferrer">
         ✈ Get Directions
       </a>
-    </div>
-    <div class="venue-bottom reveal-item">
-      <p class="with-love">WITH LOVE</p>
-      <p class="couple-script">Alok & Shephali</p>
-      <p class="venue-date-hidden" id="venue-date-note">Scratch above to reveal the date ✨</p>
+
+      <div class="venue-love reveal-item" id="venue-love">
+        <p class="with-love">WITH LOVE</p>
+        <p class="couple-script" id="venue-couple-names">Alok & Shephali</p>
+        <p class="hashtag">#AlokEngagesShephali</p>
+      </div>
     </div>
   </section>
 
