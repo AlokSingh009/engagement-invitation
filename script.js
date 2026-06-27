@@ -12,11 +12,12 @@ const INVITATION = {
   venueName: 'De Grandeur Hotel And Banquets',
   venue: 'Royal Plaza Anand Nagar, Near Bhakti Park Ghodbunder Road, Thane West, Thane, Mumbai',
   mapUrl: 'https://maps.app.goo.gl/orNarWzCHPnuG1hs6',
-  // Kithe Reh Gaya - Neeti Mohan
+  // Trimmed clip (~0.12s–76s). Run tools/trim-music.ps1 once if you only have the full MP3.
+  audioClipSrc: 'assets/background-music-clip.mp3',
   audioSrc: 'assets/background-music.mp3',
   musicTitle: 'Kithe Reh Gaya - Neeti Mohan',
-  musicStart: 0.12, // 0.12 seconds
-  musicEnd: 76, // 1 minute 16 seconds
+  musicStart: 0.12,
+  musicEnd: 76,
   musicVolume: 0.85,
 };
 
@@ -84,15 +85,22 @@ const celebrationLayer = document.getElementById('celebration-layer');
 const petalsLayer = document.getElementById('petals-layer');
 
 bgAudio.volume = INVITATION.musicVolume;
-bgAudio.loop = false;
 bgAudio.preload = 'auto';
 
-const musicSources = [INVITATION.audioSrc];
+const musicSources = [INVITATION.audioClipSrc, INVITATION.audioSrc].filter(Boolean);
 let musicSourceIndex = 0;
+let usingFullTrack = false;
+
+function applyMusicPlaybackMode(src) {
+  usingFullTrack = src === INVITATION.audioSrc;
+  bgAudio.loop = !usingFullTrack;
+}
 
 function loadMusicSource(index = 0) {
   musicSourceIndex = index;
-  bgAudio.src = musicSources[index];
+  const src = musicSources[index];
+  applyMusicPlaybackMode(src);
+  bgAudio.src = src;
   bgAudio.load();
 }
 
@@ -521,12 +529,13 @@ requestAnimationFrame(() => {
 
 startAmbientPetals();
 
-// ===== Audio: Kithe Reh Gaya — clip 0.12s → 1:16 (76s) =====
+// ===== Audio: trimmed clip (preferred) or full file with JS loop =====
 let musicLoading = false;
 let musicHasStarted = false;
 let userPausedMusic = false;
 
 function seekToMusicStart() {
+  if (!usingFullTrack) return;
   if (!Number.isFinite(INVITATION.musicStart) || bgAudio.readyState < 1) return;
   if (bgAudio.currentTime < INVITATION.musicStart || bgAudio.currentTime >= INVITATION.musicEnd) {
     bgAudio.currentTime = INVITATION.musicStart;
@@ -534,7 +543,7 @@ function seekToMusicStart() {
 }
 
 function loopMusicClip() {
-  if (bgAudio.paused) return;
+  if (!usingFullTrack || bgAudio.paused) return;
   if (bgAudio.currentTime >= INVITATION.musicEnd - 0.05) {
     seekToMusicStart();
   }
@@ -551,6 +560,7 @@ bgAudio.addEventListener('timeupdate', loopMusicClip);
 bgAudio.addEventListener('play', syncMusicToggle);
 bgAudio.addEventListener('pause', syncMusicToggle);
 bgAudio.addEventListener('ended', () => {
+  if (!usingFullTrack) return;
   seekToMusicStart();
   if (musicHasStarted && !userPausedMusic) {
     bgAudio.play().catch(() => {});
@@ -559,10 +569,13 @@ bgAudio.addEventListener('ended', () => {
 bgAudio.addEventListener('error', () => {
   if (musicSourceIndex < musicSources.length - 1) {
     loadMusicSource(musicSourceIndex + 1);
+    if (musicHasStarted && !userPausedMusic) {
+      playMusic();
+    }
     return;
   }
   console.warn(
-    `Could not load "${INVITATION.musicTitle}". Add the file as assets/background-music.mp3`
+    `Could not load "${INVITATION.musicTitle}". Add assets/background-music-clip.mp3 (run tools/trim-music.ps1) or assets/background-music.mp3`
   );
 });
 
