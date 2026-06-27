@@ -255,7 +255,7 @@ function handleScroll() {
   if (scrollHint) scrollHint.style.opacity = clamp(1 - progress * 3, 0, 1);
   envelopeScene.style.opacity = clamp(1 - progress * 0.45, 0.55, 1);
 
-  if (progress > 0.01) tryStartMusicOnScroll(progress);
+  tryAutoplayMusic();
 
   if (progress > 0.55 && !envelopeCelebrationFired) {
     envelopeCelebrationFired = true;
@@ -541,7 +541,9 @@ function loopMusicClip() {
 }
 
 function syncMusicToggle() {
-  musicToggle.classList.toggle('playing', !bgAudio.paused && musicHasStarted);
+  const isPlaying = !bgAudio.paused && musicHasStarted;
+  musicToggle.classList.toggle('playing', isPlaying);
+  musicToggle.setAttribute('aria-label', isPlaying ? 'Pause music' : 'Play music');
 }
 
 bgAudio.addEventListener('loadedmetadata', seekToMusicStart);
@@ -577,6 +579,7 @@ async function ensureAudioReady() {
 
 async function playMusic() {
   if (musicLoading) return;
+  if (musicHasStarted && !bgAudio.paused) return;
   musicLoading = true;
   try {
     await ensureAudioReady();
@@ -600,12 +603,31 @@ function pauseMusic() {
   userPausedMusic = true;
   bgAudio.pause();
   musicToggle.classList.remove('playing');
+  musicToggle.classList.remove('pulse');
+  syncMusicToggle();
 }
 
-function tryStartMusicOnScroll(progress = 0) {
+async function tryAutoplayMusic() {
   if (musicHasStarted || userPausedMusic || musicLoading) return;
-  if (window.scrollY >= 1 || progress > 0.01) playMusic();
+  await playMusic();
 }
+
+function bindMusicAutoplayFallback() {
+  const resumeOnGesture = () => {
+    if (!userPausedMusic) tryAutoplayMusic();
+  };
+
+  ['pointerdown', 'touchstart', 'keydown', 'scroll'].forEach((eventName) => {
+    document.addEventListener(eventName, resumeOnGesture, { passive: true });
+  });
+}
+
+bgAudio.addEventListener('canplay', () => {
+  tryAutoplayMusic();
+});
+
+bindMusicAutoplayFallback();
+tryAutoplayMusic();
 
 musicToggle.addEventListener('click', async () => {
   if (bgAudio.paused) {
